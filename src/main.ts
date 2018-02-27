@@ -8,8 +8,6 @@ import Camera from './Camera';
 import {setGL} from './globals';
 import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
 import LSystem from './LSystem/LSystem'
-import Plant from './LSystem/Plant'
-import PlantPart from './geometry/PlantPart'
 import Rock from './geometry/Rock';
 import Building from './LSystem/Building';
 import City from './LSystem/City';

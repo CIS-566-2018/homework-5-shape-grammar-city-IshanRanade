@@ -1,6 +1,6 @@
 import Building from "./Building";
 import { vec3, vec4 } from "gl-matrix";
-import PropertyHolder from "../geometry/PropertyHolder";
+import PropertyHolder from "../LSystem/PropertyHolder";
 
 class City {
 

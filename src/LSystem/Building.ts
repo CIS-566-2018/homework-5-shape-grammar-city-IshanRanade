@@ -5,7 +5,7 @@ import LSystem from './LSystem';
 import Node from './Node'
 import Turtle from './Turtle';
 import BuildingPart from '../geometry/BuildingPart';
-import PropertyHolder from '../geometry/PropertyHolder';
+import PropertyHolder from "../LSystem/PropertyHolder";
 
 class Building {
   originTranslation: vec3;
