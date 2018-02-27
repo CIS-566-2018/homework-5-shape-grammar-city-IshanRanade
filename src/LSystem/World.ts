@@ -12,16 +12,33 @@ class World {
   types: string[];
   center: vec3;
   up: vec3;
+  seed: any;
   
-  constructor(meshes: any, types: string[], center: vec3, up: vec3) {
+  constructor(meshes: any, types: string[], center: vec3, up: vec3, seed: any) {
     this.meshes = meshes;
     this.types = types;
     this.center = center;
     this.up = up;
+    this.seed = seed;
+
+
+    // Set the model matrices for each type of geometry
     this.drawableGeometry = {};
+    let trans: { [key:string]:mat4; } = {};
+    trans['tank'] = mat4.create();
+    trans['base'] = mat4.create();
+    trans['door'] = mat4.create();
+    trans['crater'] = mat4.create();
+    trans['road'] = mat4.create();
+
+    trans['platform'] = mat4.create();
+    mat4.scale(trans['platform'], trans['platform'], vec3.fromValues(0.2,0.2,0.2));
+
     this.types.forEach(type => {
-      this.drawableGeometry[type] = new OBJGeometry(vec3.fromValues(0,0,0), meshes, type, vec4.fromValues(0.5,0.5,0.5,1), mat4.create());
+      this.drawableGeometry[type] = new OBJGeometry(vec3.fromValues(0,0,0), meshes, type, vec4.fromValues(0.5,0.5,0.5,1), trans[type]);
     });
+
+
 
     this.geometry = {};
     this.types.forEach(type => {
@@ -32,7 +49,7 @@ class World {
   }
 
   generate() {
-    let colony: Colony = new Colony(this.meshes, this.geometry, vec3.fromValues(0,0,0), this.up, 10);
+    let colony: Colony = new Colony(this.geometry, this.seed, vec3.fromValues(0,0,0), this.up, 10);
   }
 
   create() {

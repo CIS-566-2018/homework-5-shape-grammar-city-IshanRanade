@@ -68,21 +68,10 @@ let world: World;
 let types: string[] = ['tank', 'base', 'door', 'crater', 'road', 'platform'];
 
 function loadScene() {
-  world = new World(meshes, types, vec3.fromValues(0,0,0), vec3.fromValues(0,1,0));
+  world = new World(meshes, types, vec3.fromValues(0,0,0), vec3.fromValues(0,1,0), seed);
   world.create();
 
-  // city = new City(types, vec3.fromValues(0,0,0), seedrandom(0), meshes, vec3.fromValues(0,1,0));
-  // city.generate();
-
-  // let baseString: string = "base";
-  // base = new OBJGeometry(vec3.fromValues(0,0,0), meshes, baseString, vec4.fromValues(0.5, 0.5, 0.5, 1), mat4.create());
-  // base.setInstanceProperties(city.geometry[baseString].translations, city.geometry[baseString].quaternions, city.geometry[baseString].scales, city.geometry[baseString].translations.length/4);
-  // base.create();
-
-  // let doorString: string = "door";
-  // door = new OBJGeometry(vec3.fromValues(0,0,0), meshes, doorString, vec4.fromValues(0.5, 0.5, 0.5, 1), mat4.create());
-  // door.setInstanceProperties(city.geometry[doorString].translations, city.geometry[doorString].quaternions, city.geometry[doorString].scales, city.geometry[doorString].translations.length/4);
-  // door.create();
+  seed++;
 }
 
 function main() {
@@ -136,12 +125,10 @@ function main() {
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
 
-    renderer.render(camera, backgroundShader, [
-    ]);
+    //renderer.render(camera, backgroundShader, [
+    //]);
 
     renderer.render(camera, lambert, world.getDrawables());
-
-
 
     stats.end();
 

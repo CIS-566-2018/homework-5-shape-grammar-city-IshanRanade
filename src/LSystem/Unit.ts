@@ -4,40 +4,25 @@ import PropertyHolder from "../LSystem/PropertyHolder";
 
 class Unit {
 
-  center: vec3;
-  seed: any;
-  meshes: any;
-  up: vec3;
-
   geometry: { [key:string]:PropertyHolder; };
+  center: vec3;
+  up: vec3;
+  radius: number;
+  seed: any;
 
-  constructor(types: string[], center: vec3, seedRandom: any, meshes: any, up: vec3) {
+  constructor(geometry: { [key:string]:PropertyHolder; }, seed: any, center: vec3, up: vec3, radius: number) {
+    this.geometry = geometry;
     this.center = center;
-    this.seed = seedRandom;
-    this.meshes = meshes;
     this.up = up;
-    this.geometry = {};
-    
-    types.forEach(type => {
-      this.geometry[type] = new PropertyHolder();
-    });
+    this.radius = radius;
+    this.seed = seed;
+
+    this.generate();
   }
 
   generate() {
-    let building: Building = new Building(this.meshes, vec3.fromValues(0,0,0), vec3.fromValues(0,0,1), vec3.fromValues(1,1,1), this.up);
-    this.addBuilding(building);
-  }
+    this.geometry['platform'].add(vec4.fromValues(0,0,0,0), vec4.fromValues(0,0,0,1), vec4.fromValues(1,1,1,1));
 
-  createBuilding() {
-
-  }
-
-  addBuilding(building: Building) {
-    for(let partName in building.buildingParts) {
-      this.geometry[partName].addMultiple(building.buildingParts[partName].translations,
-                                          building.buildingParts[partName].quaternions,
-                                          building.buildingParts[partName].scales);
-    }
   }
 }
 

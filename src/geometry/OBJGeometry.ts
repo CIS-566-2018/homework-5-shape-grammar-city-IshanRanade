@@ -48,20 +48,15 @@ class OBJGeometry extends Drawable {
     for(let i: number = 0; i < mesh.indices.length; ++i) {
       tempIndices.push(mesh.indices[i]);
 
-      tempNormals.push(mesh.vertexNormals[i * 3]);
-      tempNormals.push(mesh.vertexNormals[i * 3 + 1]);
-      tempNormals.push(mesh.vertexNormals[i * 3 + 2]);
-      tempNormals.push(0);
+      let tempNormal: vec4 = vec4.fromValues(mesh.vertexNormals[i*3], mesh.vertexNormals[i*3+1], mesh.vertexNormals[i*3+2], 0);
+      let tempPosition: vec4 = vec4.fromValues(mesh.vertices[i*3], mesh.vertices[i*3+1], mesh.vertices[i*3+2], 1);
 
-      tempPositions.push(mesh.vertices[i * 3]);
-      tempPositions.push(mesh.vertices[i * 3 + 1]);
-      tempPositions.push(mesh.vertices[i * 3 + 2]);
-      tempPositions.push(1);
+      vec4.transformMat4(tempNormal, tempNormal, this.model);
+      vec4.transformMat4(tempPosition, tempPosition, this.model)
 
-      tempColors.push(this.color[0]);
-      tempColors.push(this.color[1]);
-      tempColors.push(this.color[2]);
-      tempColors.push(this.color[3]);
+      tempNormals.push(tempNormal[0], tempNormal[1], tempNormal[2], 0);
+      tempPositions.push(tempPosition[0], tempPosition[1], tempPosition[2], 1);
+      tempColors.push(this.color[0], this.color[1], this.color[2], this.color[3]);
     }
 
     this.indices = new Uint32Array(tempIndices);

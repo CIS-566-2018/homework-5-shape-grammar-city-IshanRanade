@@ -1,5 +1,6 @@
 import { vec3, vec4 } from "gl-matrix";
 import PropertyHolder from "./PropertyHolder";
+import Unit from "./Unit";
 
 class Colony {
 
@@ -7,20 +8,22 @@ class Colony {
   center: vec3;
   up: vec3;
   radius: number;
-  meshes: any;
+  seed: any;
 
-  constructor(meshes: any, geometry: { [key:string]:PropertyHolder; }, center: vec3, up: vec3, radius: number) {
-    this.meshes = meshes;
+  constructor(geometry: { [key:string]:PropertyHolder; }, seed: any, center: vec3, up: vec3, radius: number) {
     this.geometry = geometry;
     this.center = center;
     this.up = up;
     this.radius = radius;
+    this.seed = seed;
 
     this.generate();
   }
 
   generate() {
     this.geometry['crater'].add(vec4.fromValues(0,0,0,0), vec4.fromValues(0,0,0,1), vec4.fromValues(1,1,1,1));
+
+    let unit: Unit = new Unit(this.geometry, this.seed, this.center, this.up, 5);
   }
 }
 
