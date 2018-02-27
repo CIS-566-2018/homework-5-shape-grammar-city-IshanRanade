@@ -11,13 +11,16 @@ class City {
 
   geometry: { [key:string]:PropertyHolder; };
 
-  constructor(center: vec3, seedRandom: any, meshes: any, up: vec3) {
+  constructor(types: string[], center: vec3, seedRandom: any, meshes: any, up: vec3) {
     this.center = center;
     this.seed = seedRandom;
     this.meshes = meshes;
     this.up = up;
     this.geometry = {};
-    this.geometry['base'] = new PropertyHolder();
+    
+    types.forEach(type => {
+      this.geometry[type] = new PropertyHolder();
+    });
   }
 
   generate() {

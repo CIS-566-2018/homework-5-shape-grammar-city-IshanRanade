@@ -18,6 +18,8 @@ class Building {
 
   meshes: any;
 
+  turtle: Turtle;
+
   buildingParts: { [key:string]:PropertyHolder; };
 
   constructor(meshes: any, originTranslation: vec3, originAim: vec3, originScale: vec3, originUp: vec3) {
@@ -27,13 +29,13 @@ class Building {
     this.originScale = originScale;
     this.originUp = originUp;
     this.buildingParts = {};
-    this.buildingParts['base'] = new PropertyHolder();
+    this.buildingParts['door'] = new PropertyHolder();
 
     this.createLayout();
   }
 
   createLayout() {
-    this.buildingParts['base'].add(vec4.fromValues(0,0,0,0), vec4.fromValues(0,0,0,1), vec4.fromValues(1,1,1,1));
+    this.buildingParts['door'].add(vec4.fromValues(0,0,0,0), vec4.fromValues(0,0,0,1), vec4.fromValues(1,1,1,1));
   }
 }
 

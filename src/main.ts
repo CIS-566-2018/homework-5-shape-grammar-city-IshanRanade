@@ -18,7 +18,8 @@ var meshes: any;
 window.onload = function() {
   OBJ.downloadMeshes({
     'tank': 'src/objs/cylinder2.obj',
-    'base': 'src/objs/base.obj'
+    'base': 'src/objs/base.obj',
+    'door': 'src/objs/door.obj'
   }, function(m: any) {
     meshes = m;
     main();
@@ -56,16 +57,26 @@ let city: City;
 
 // Drawable geometry
 let base: BuildingPart;
+let tank: BuildingPart;
+let door: BuildingPart;
+
+let types: string[] = ['tank', 'base', 'door'];
 
 function loadScene() {
-  city = new City(vec3.fromValues(0,0,0), seedrandom(0), meshes, vec3.fromValues(0,1,0));
+  city = new City(types, vec3.fromValues(0,0,0), seedrandom(0), meshes, vec3.fromValues(0,1,0));
   city.generate();
 
-  base = new BuildingPart(vec3.fromValues(0,0,0), meshes, 'base', vec4.fromValues(0.5, 0.5, 0.5, 1), mat4.create());
-  base.setInstanceProperties(city.geometry['base'].translations, city.geometry['base'].quaternions, city.geometry['base'].scales, city.geometry['base'].translations.length/4);
+  let baseString: string = "base";
+  base = new BuildingPart(vec3.fromValues(0,0,0), meshes, baseString, vec4.fromValues(0.5, 0.5, 0.5, 1), mat4.create());
+  base.setInstanceProperties(city.geometry[baseString].translations, city.geometry[baseString].quaternions, city.geometry[baseString].scales, city.geometry[baseString].translations.length/4);
   base.create();
 
-  console.log(city.geometry['base'].scales);
+  let doorString: string = "door";
+  door = new BuildingPart(vec3.fromValues(0,0,0), meshes, doorString, vec4.fromValues(0.5, 0.5, 0.5, 1), mat4.create());
+  door.setInstanceProperties(city.geometry[doorString].translations, city.geometry[doorString].quaternions, city.geometry[doorString].scales, city.geometry[doorString].translations.length/4);
+  door.create();
+
+  console.log(city.geometry['door'].scales);
 }
 
 function main() {
@@ -123,7 +134,8 @@ function main() {
     ]);
 
     renderer.render(camera, lambert, [
-      base
+      base,
+      door
     ]);
 
 
