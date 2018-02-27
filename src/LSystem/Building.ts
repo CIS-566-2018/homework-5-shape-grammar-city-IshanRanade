@@ -4,7 +4,7 @@ import {gl} from '../globals';
 import LSystem from './LSystem';
 import Node from './Node'
 import Turtle from './Turtle';
-import BuildingPart from '../geometry/BuildingPart';
+import BuildingPart from '../geometry/OBJGeometry';
 import PropertyHolder from "../LSystem/PropertyHolder";
 
 class Building {
@@ -36,6 +36,8 @@ class Building {
 
   createLayout() {
     this.buildingParts['door'].add(vec4.fromValues(0,0,0,0), vec4.fromValues(0,0,0,1), vec4.fromValues(1,1,1,1));
+
+    //this.turtle = new Turtle(this.originTranslation, this.originAim, this.originScale)
   }
 }
 

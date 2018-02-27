@@ -2,7 +2,7 @@ import Building from "./Building";
 import { vec3, vec4 } from "gl-matrix";
 import PropertyHolder from "../LSystem/PropertyHolder";
 
-class City {
+class Unit {
 
   center: vec3;
   seed: any;
@@ -41,4 +41,4 @@ class City {
   }
 }
 
-export default City;
+export default Unit;

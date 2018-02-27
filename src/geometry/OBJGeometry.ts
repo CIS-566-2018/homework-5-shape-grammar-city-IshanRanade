@@ -2,7 +2,7 @@ import {vec3, vec4, mat4} from 'gl-matrix';
 import Drawable from '../rendering/gl/Drawable';
 import {gl} from '../globals';
 
-class BuildingPart extends Drawable {
+class OBJGeometry extends Drawable {
   indices: Uint32Array;
   positions: Float32Array;
   normals: Float32Array;
@@ -101,4 +101,4 @@ class BuildingPart extends Drawable {
   }
 };
 
-export default BuildingPart;
+export default OBJGeometry;
