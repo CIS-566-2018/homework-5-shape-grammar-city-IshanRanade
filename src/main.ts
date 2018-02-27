@@ -11,14 +11,16 @@ import LSystem from './LSystem/LSystem'
 import Plant from './LSystem/Plant'
 import PlantPart from './geometry/PlantPart'
 import Rock from './geometry/Rock';
+import Building from './LSystem/Building';
+import City from './LSystem/City';
+import BuildingPart from './geometry/BuildingPart';
 
 var OBJ = require('webgl-obj-loader');
 var meshes: any;
 window.onload = function() {
   OBJ.downloadMeshes({
-    'bark': 'src/objs/cylinder.obj',
-    'cherryBlossom': 'src/objs/cherryBlossom.obj',
-    'rock': 'src/objs/rock.obj'
+    'tank': 'src/objs/cylinder2.obj',
+    'base': 'src/objs/base.obj'
   }, function(m: any) {
     meshes = m;
     main();
@@ -27,36 +29,9 @@ window.onload = function() {
 
 var seedrandom = require('seedrandom');
 
-let plant: Plant;
-
-let bark: PlantPart;
-let leaf: PlantPart;
-let rock: Rock;
-
-let background: Square;
-
-let barkColor: vec3 = vec3.fromValues(30,2,2);
-let leafColor: vec3 = vec3.fromValues(245, 177, 245);
-let rockColor: vec3 = vec3.fromValues(50,50,50);
-
-let iterations = 6;
-let seed: number = 9;
-
-let collisionCheck: boolean = false;
-
 // Define an object with application parameters and button callbacks
 // This will be referred to by dat.GUI's functions that add GUI elements.
 const controls = {
-  tesselations: 5,
-  'Generate': loadScene, // A function pointer, essentially
-  'Leaf Color': [leafColor[0], leafColor[1], leafColor[2]],
-  'Bark Color': [barkColor[0], barkColor[1], barkColor[2]],
-  'Iterations': 6,
-  'Leaf Collision': (function() {
-    collisionCheck = !collisionCheck;
-    seed--;
-    loadScene();
-  })
 };
 
 function componentToHex(c: number) {
@@ -77,24 +52,22 @@ function hexToRgb(hex: string) {
   } : null;
 }
 
+
+let seed: number = 0;
+let city: City;
+
+// Drawable geometry
+let base: BuildingPart;
+
 function loadScene() {
-  plant = new Plant(vec3.fromValues(0,0,0), meshes, iterations, seedrandom(seed), collisionCheck);
-  plant.createTree();
+  city = new City(vec3.fromValues(0,0,0), seedrandom(0), meshes, vec3.fromValues(0,1,0));
+  city.generate();
 
-  leaf = new PlantPart(vec3.fromValues(0,0,0), meshes, "cherryBlossom", 
-          vec4.fromValues(leafColor[0]/255.0,leafColor[1]/255.0,leafColor[2]/255.0,1), mat4.create());
-  leaf.setInstanceProperties(plant.translationsLeaf, plant.quaternionsLeaf, plant.scalesLeaf, plant.leafInstanceCount);
-  leaf.create();
+  base = new BuildingPart(vec3.fromValues(0,0,0), meshes, 'base', vec4.fromValues(0.5, 0.5, 0.5, 1), mat4.create());
+  base.setInstanceProperties(city.geometry['base'].translations, city.geometry['base'].quaternions, city.geometry['base'].scales, city.geometry['base'].translations.length/4);
+  base.create();
 
-  bark = new PlantPart(vec3.fromValues(0,0,0), meshes, "bark", 
-          vec4.fromValues(barkColor[0]/255.0, barkColor[1]/255.0, barkColor[2]/255.0, 1), mat4.create());
-  bark.setInstanceProperties(plant.translationsBark, plant.quaternionsBark, plant.scalesBark, plant.barkInstanceCount);
-  bark.create();
-
-  background = new Square(vec3.fromValues(0,0,0));
-  background.create();
-
-  seed++;
+  console.log(city.geometry['base'].scales);
 }
 
 function main() {
@@ -109,26 +82,6 @@ function main() {
 
   // Add controls to the gui
   const gui = new DAT.GUI();
-  gui.addColor
-  gui.add(controls, 'Generate');
-  gui.addColor({'Leaf Color': rgbToHex(leafColor[0], leafColor[1], leafColor[2])}, 'Leaf Color').onChange(
-    function(hex: string) {
-      let rgb = hexToRgb(hex);
-      leafColor = vec3.fromValues(rgb.r,rgb.g,rgb.b);
-    }
-  );
-  gui.addColor({'Bark Color': rgbToHex(barkColor[0], barkColor[1], barkColor[2])}, 'Bark Color').onChange(
-    function(hex: string) {
-      let rgb = hexToRgb(hex);
-      barkColor = vec3.fromValues(rgb.r,rgb.g,rgb.b);
-    }
-  );
-  gui.add(controls, 'Iterations').min(1).max(7).step(1).onChange(
-    function(iter: number) {
-      iterations = iter;
-    }
-  )
-  gui.add(controls, 'Leaf Collision');
 
   // get canvas and webgl context
   const canvas = <HTMLCanvasElement> document.getElementById('canvas');
@@ -143,14 +96,12 @@ function main() {
   // Initial call to load scene
   loadScene();
 
-  let cameraPos: vec3 = vec3.fromValues(0, 25, -200);
-  vec3.rotateY(cameraPos, cameraPos, vec3.fromValues(0,0,0), 290 * Math.PI / 180.0);
-  const camera = new Camera(cameraPos, vec3.fromValues(0, 35, 0));
+  //let cameraPos: vec3 = vec3.fromValues(0, 25, -200);
+  //vec3.rotateY(cameraPos, cameraPos, vec3.fromValues(0,0,0), 290 * Math.PI / 180.0);
+  const camera = new Camera(vec3.fromValues(10,10,10), vec3.fromValues(0, 0, 0));
 
   const renderer = new OpenGLRenderer(canvas);
-  //renderer.setClearColor(1,0,0,1);
-  //renderer.setClearColor(187/255.0, 249/255.0, 249/255.0, 1);
-  //renderer.setClearColor(239/255.0, 201/255.0, 212/255.0, 1);
+  renderer.setClearColor(1,1,1,1);
   gl.enable(gl.DEPTH_TEST);
 
   const lambert = new ShaderProgram([
@@ -163,15 +114,6 @@ function main() {
     new Shader(gl.FRAGMENT_SHADER, require('./shaders/background-frag.glsl')),
   ]);
 
-  let rockTrans: mat4 = mat4.create();
-  mat4.translate(rockTrans, rockTrans, vec3.fromValues(12,-315,-23));
-  mat4.rotateY(rockTrans, rockTrans, 10);
-  mat4.scale(rockTrans, rockTrans, vec3.fromValues(15,15,15));
-
-  rock = new Rock(vec3.fromValues(0,0,0), meshes, "rock", 
-          vec4.fromValues(rockColor[0]/255.0,rockColor[1]/255.0,rockColor[2]/255.0,1), rockTrans);
-  rock.create();
-
   // This function will be called every frame
   function tick() {
     camera.update();
@@ -180,13 +122,10 @@ function main() {
     renderer.clear();
 
     renderer.render(camera, backgroundShader, [
-      background
     ]);
 
     renderer.render(camera, lambert, [
-      leaf,
-      bark,
-      rock
+      base
     ]);
 
 
