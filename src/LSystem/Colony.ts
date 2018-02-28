@@ -73,7 +73,8 @@ class Colony {
             }
           }
 
-          if(!keepGoing || vec3.distance(this.center, colonyCoord.coordinates) < 1.0 * (r + colonyCoord.radius)) {
+          if(!keepGoing || vec3.distance(this.center, colonyCoord.coordinates) < 1.0 * (r + colonyCoord.radius) ||
+              vec3.distance(this.center, colonyCoord.coordinates) + colonyCoord.radius > 4.0 * r) {
             continue;
           }
 
