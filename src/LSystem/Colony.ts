@@ -42,7 +42,7 @@ class Colony {
     while(queue.length > 0) {
       let curData = queue.pop();
 
-      let maxLevel: number = 3;
+      let maxLevel: number = 4;
       if(curData.level < maxLevel) {
         let nextColonyAim = vec3.fromValues(1,0,0);
         vec3.scale(nextColonyAim, nextColonyAim, curData.distance);
@@ -77,7 +77,7 @@ class Colony {
           vec3.scale(translation, translation, 0.5);
           this.geometry['road'].add(vec4.fromValues(translation[0], translation[1], translation[2], 1),
                                     vec4.fromValues(q[0], q[1], q[2], q[3]), 
-                                    vec4.fromValues(vec3.distance(nextColonyPosition, curData.center) * 0.15,0.4,0.3 * (maxLevel - curData.level),1));
+                                    vec4.fromValues(vec3.distance(nextColonyPosition, curData.center) * 0.15,0.4,0.3 * vec3.distance(nextColonyPosition, curData.center),1));
 
           nearestTrees.insert({
             coordinates: [translation[0], translation[1], translation[2]],
