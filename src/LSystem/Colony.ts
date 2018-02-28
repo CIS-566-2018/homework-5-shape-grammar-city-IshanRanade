@@ -23,9 +23,13 @@ class Colony {
   }
 
   generate() {
+    let colonyRotation: quat = quat.create();
+    let degrees = this.seed() * 360;
+    quat.rotateY(colonyRotation, colonyRotation, degrees * Math.PI / 180);
+
     let domeScale: number = 3.3;
-    this.geometry['crater'].add(vec4.fromValues(0,0,0,0), vec4.fromValues(0,0,0,1), vec4.fromValues(this.radius,this.radius,this.radius,this.radius));
-    this.geometry['dome'].add(vec4.fromValues(0,0,0,0), vec4.fromValues(0,0,0,1), vec4.fromValues(this.radius*domeScale,this.radius*domeScale,this.radius*domeScale,this.radius));
+    this.geometry['crater'].add(vec4.fromValues(this.center[0], this.center[1], this.center[2], 1), vec4.fromValues(colonyRotation[0],colonyRotation[1],colonyRotation[2],colonyRotation[3]), vec4.fromValues(this.radius,this.radius,this.radius,this.radius));
+    this.geometry['dome'].add(vec4.fromValues(this.center[0], this.center[1], this.center[2], 1), vec4.fromValues(colonyRotation[0],colonyRotation[1],colonyRotation[2],colonyRotation[3]), vec4.fromValues(this.radius*domeScale,this.radius*domeScale,this.radius*domeScale,this.radius));
 
 
     let r = this.radius * 0.8;
@@ -61,7 +65,7 @@ class Colony {
 
           var nearest = nearestTrees.nearest(colonyCoord, 1);
           if((nearest.length > 0 && nearest[0][1] < curData.radius) || 
-              (vec3.distance(nextColonyPosition, this.center)) + curData.radius > this.radius * 3) {
+              (vec3.distance(nextColonyPosition, this.center)) + curData.radius > this.radius * 2.85) {
             continue;
           }
 
