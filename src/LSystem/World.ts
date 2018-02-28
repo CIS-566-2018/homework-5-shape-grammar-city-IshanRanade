@@ -32,7 +32,8 @@ class World {
     trans['road'] = mat4.create();
 
     trans['platform'] = mat4.create();
-    mat4.scale(trans['platform'], trans['platform'], vec3.fromValues(0.2,0.2,0.2));
+    mat4.scale(trans['platform'], trans['platform'], vec3.fromValues(0.2,1.0,0.2));
+    //mat4.translate(trans['platform'], trans['platform'], vec3.fromValues(0,1,0));
 
     this.types.forEach(type => {
       this.drawableGeometry[type] = new OBJGeometry(vec3.fromValues(0,0,0), meshes, type, vec4.fromValues(0.5,0.5,0.5,1), trans[type]);

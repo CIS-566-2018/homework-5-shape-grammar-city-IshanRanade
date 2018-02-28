@@ -54,7 +54,8 @@ class Colony {
           };
 
           var nearest = nearestTrees.nearest(colonyCoord, 1);
-          if(nearest.length > 0 && nearest[0][1] < curData.radius) {
+          if((nearest.length > 0 && nearest[0][1] < curData.radius) || 
+              (vec3.distance(nextColonyPosition, this.center)) + curData.radius > this.radius * 4) {
             continue;
           }
 
