@@ -31,13 +31,28 @@ class World {
     trans['crater'] = mat4.create();
     trans['road'] = mat4.create();
     trans['dome'] = mat4.create();
-
     trans['platform'] = mat4.create();
     mat4.scale(trans['platform'], trans['platform'], vec3.fromValues(0.2,1.0,0.2));
-    //mat4.translate(trans['platform'], trans['platform'], vec3.fromValues(0,1,0));
+
+    // Set the colors for each type of geometry
+    let colors: { [key:string]:vec4; } = {};
+    colors['tank'] = vec4.fromValues(255,255,255,255.0);
+    vec4.scale(colors['tank'], colors['tank'], 1/255.0);
+    colors['base'] = vec4.fromValues(255,255,255,255.0);
+    vec4.scale(colors['base'], colors['base'], 1/255.0);
+    colors['door'] = vec4.fromValues(255,255,255,255.0);
+    vec4.scale(colors['door'], colors['door'], 1/255.0);
+    colors['crater'] = vec4.fromValues(255,255,255,255.0);
+    vec4.scale(colors['crater'], colors['crater'], 1/255.0);
+    colors['road'] = vec4.fromValues(208, 216, 229,255.0);
+    vec4.scale(colors['road'], colors['road'], 1/255.0);
+    colors['dome'] = vec4.fromValues(255,255,255,255.0 * 0.2);
+    vec4.scale(colors['dome'], colors['dome'], 1/255.0);
+    colors['platform'] = vec4.fromValues(170, 196, 239, 255);
+    vec4.scale(colors['platform'], colors['platform'], 1/255.0);
 
     this.types.forEach(type => {
-      this.drawableGeometry[type] = new OBJGeometry(vec3.fromValues(0,0,0), meshes, type, vec4.fromValues(0.5,0.5,0.5,1), trans[type]);
+      this.drawableGeometry[type] = new OBJGeometry(vec3.fromValues(0,0,0), meshes, type, colors[type], trans[type]);
     });
 
 

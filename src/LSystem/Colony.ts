@@ -30,7 +30,7 @@ class Colony {
 
     let r = this.radius * 0.8;
     var distance = function(a: any, b: any){
-      return Math.sqrt(Math.pow(a.coordinates[0] - b.coordinates[0], 2) +  Math.pow(a.coordinates[1] - b.coordinates[1], 2) + Math.pow(a.coordinates[2] - b.coordinates[2], 2)) - a.radius - r / 5.0;
+      return Math.sqrt(Math.pow(a.coordinates[0] - b.coordinates[0], 2) +  Math.pow(a.coordinates[1] - b.coordinates[1], 2) + Math.pow(a.coordinates[2] - b.coordinates[2], 2)) - a.radius;
     }
 
     let nearestTrees = new kdTree([], distance);
@@ -42,7 +42,7 @@ class Colony {
     while(queue.length > 0) {
       let curData = queue.pop();
 
-      let maxLevel: number = 4;
+      let maxLevel: number = 3;
       if(curData.level < maxLevel) {
         let nextColonyAim = vec3.fromValues(1,0,0);
         vec3.scale(nextColonyAim, nextColonyAim, curData.distance);
@@ -77,11 +77,11 @@ class Colony {
           vec3.scale(translation, translation, 0.5);
           this.geometry['road'].add(vec4.fromValues(translation[0], translation[1], translation[2], 1),
                                     vec4.fromValues(q[0], q[1], q[2], q[3]), 
-                                    vec4.fromValues(vec3.distance(nextColonyPosition, curData.center) * 0.15,0.4,0.3 * vec3.distance(nextColonyPosition, curData.center),1));
+                                    vec4.fromValues(vec3.distance(nextColonyPosition, curData.center) * 0.15,0.4,0.1 * vec3.distance(nextColonyPosition, curData.center),1));
 
           nearestTrees.insert({
             coordinates: [translation[0], translation[1], translation[2]],
-            radius: curData.radius/2.0
+            radius: curData.radius
           });
 
           queue.push({center: vec3.fromValues(nextColonyPosition[0], nextColonyPosition[1], nextColonyPosition[2]),
