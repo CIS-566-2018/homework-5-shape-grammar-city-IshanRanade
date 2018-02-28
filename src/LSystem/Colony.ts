@@ -43,10 +43,12 @@ class Colony {
 
     let queue = [{center: this.center, radius: r / 2, distance: r * 2, level: 0}];
     
+    let units: any = [];
+
     while(queue.length > 0) {
       let curData = queue.pop();
 
-      let maxLevel: number = 3;
+      let maxLevel: number = 4;
       if(curData.level < maxLevel) {
         let nextColonyAim = vec3.fromValues(1,0,0);
         vec3.scale(nextColonyAim, nextColonyAim, curData.distance);
@@ -59,17 +61,23 @@ class Colony {
           vec3.rotateY(nextColonyPosition, nextColonyAim, curData.center, degrees * Math.PI / 180);
 
           var colonyCoord = {
-            coordinates: [nextColonyPosition[0], nextColonyPosition[1], nextColonyPosition[2]],
+            coordinates: nextColonyPosition,
             radius: curData.radius
           };
 
-          var nearest = nearestTrees.nearest(colonyCoord, 1);
-          if((nearest.length > 0 && nearest[0][1] < curData.radius) || 
-              (vec3.distance(nextColonyPosition, this.center)) + curData.radius > this.radius * 2.85) {
+          let keepGoing: boolean = true;
+          for(let j: number = 0; j < units.length; ++j) {
+            let element = units[j];
+            if(vec3.distance(element.coordinates, colonyCoord.coordinates) < 1.0 * (element.radius + colonyCoord.radius)) {
+              keepGoing = false;
+            }
+          }
+
+          if(!keepGoing) {
             continue;
           }
 
-          nearestTrees.insert(colonyCoord);
+          units.push(colonyCoord);
           let unit: Unit = new Unit(this.geometry, this.seed, nextColonyPosition, this.up, curData.radius);
 
           // Add a road

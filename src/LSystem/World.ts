@@ -72,11 +72,6 @@ class World {
   }
 
   generate() {
-    // var distance = function(a: any, b: any){
-    //   return Math.sqrt(Math.pow(a.coordinates[0] - b.coordinates[0], 2) +  Math.pow(a.coordinates[1] - b.coordinates[1], 2) + Math.pow(a.coordinates[2] - b.coordinates[2], 2)) - b.radius - a.radius;
-    // }
-    // let nearestTrees = new kdTree([], distance);
-
     // Add the ground plane
     this.geometry['ground'].add(vec4.fromValues(this.center[0], this.center[1] - 1.455, this.center[2], 1),
                                 vec4.fromValues(0, 0, 0, 1), 
@@ -89,7 +84,6 @@ class World {
       coordinates: [this.center[0], this.center[1], this.center[2]],
       radius: firstRadius
     };
-    //nearestTrees.insert(firstColonyCoord);
 
     let colonies = [];
     colonies.push({
@@ -112,14 +106,9 @@ class World {
         radius: colonyRadius
       };
 
-      // var nearest = nearestTrees.nearest(colonyCoord, 1, colonyRadius);
-      // if(nearest.length > 0) {
-      //   continue;
-      // }
       let keepGoing: boolean = true;
       colonies.forEach(element => {
         if(vec3.distance(element.coordinates, colonyCoord.coordinates) < 4* element.radius + 4*colonyCoord.radius) {
-          console.log("here");
           keepGoing = false;
         }
       });
@@ -132,10 +121,6 @@ class World {
 
       let newColony = new Colony(this.geometry, this.seed, aim, this.up, colonyRadius);
     }
-
-    //let colony: Colony = new Colony(this.geometry, this.seed, vec3.fromValues(0,0,0), this.up, 2);
-
-    //colony = new Colony(this.geometry, this.seed, vec3.fromValues(10,0,10), this.up, 2);
   }
 
   create() {
