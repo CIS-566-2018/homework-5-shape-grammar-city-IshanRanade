@@ -49,7 +49,7 @@ class World {
   }
 
   generate() {
-    let colony: Colony = new Colony(this.geometry, this.seed, vec3.fromValues(0,0,0), this.up, 1);
+    let colony: Colony = new Colony(this.geometry, this.seed, vec3.fromValues(0,0,0), this.up, 2);
   }
 
   create() {

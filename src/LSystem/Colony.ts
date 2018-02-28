@@ -25,46 +25,49 @@ class Colony {
   generate() {
     this.geometry['crater'].add(vec4.fromValues(0,0,0,0), vec4.fromValues(0,0,0,1), vec4.fromValues(this.radius,this.radius,this.radius,this.radius));
 
-    let r = this.radius;
+    let r = this.radius * 0.8;
     var distance = function(a: any, b: any){
       return Math.sqrt(Math.pow(a.coordinates[0] - b.coordinates[0], 2) +  Math.pow(a.coordinates[1] - b.coordinates[1], 2) + Math.pow(a.coordinates[2] - b.coordinates[2], 2)) - a.radius - r / 5.0;
     }
 
     let nearestTrees = new kdTree([], distance);
 
-    let unit: Unit = new Unit(this.geometry, this.seed, this.center, this.up, this.radius);
+    let unit: Unit = new Unit(this.geometry, this.seed, this.center, this.up, r);
 
-    let queue = [this.center];
-
-    let startDistance: number = this.radius * 2;
-
-    let curRadius: number = this.radius / 2;
+    let queue = [{center: this.center, radius: r / 2, distance: r * 2, level: 0}];
+    
     while(queue.length > 0) {
-      let curPosition: vec3 = queue.pop();
-      let nextColonyAim = vec3.fromValues(1,0,0);
-      vec3.scale(nextColonyAim, nextColonyAim, startDistance);
-      vec3.add(nextColonyAim, nextColonyAim, curPosition);
+      let curData = queue.pop();
 
-      for(let i: number = 0; i < 20; ++i) {
-        let nextColonyPosition: vec3 = vec3.create();
-        vec3.rotateY(nextColonyPosition, nextColonyAim, vec3.fromValues(0,0,0), this.seed() * 360);
+      if(curData.level < 4) {
+        let nextColonyAim = vec3.fromValues(1,0,0);
+        vec3.scale(nextColonyAim, nextColonyAim, curData.distance);
+        vec3.add(nextColonyAim, nextColonyAim, curData.center);
 
-        var colonyCoord = {
-          coordinates: [nextColonyPosition[0], nextColonyPosition[1], nextColonyPosition[2]],
-          radius: curRadius
-        };
+        for(let i: number = 0; i < 5; ++i) {
+          let nextColonyPosition: vec3 = vec3.create();
+          vec3.rotateY(nextColonyPosition, nextColonyAim, vec3.fromValues(0,0,0), this.seed() * 360);
 
-        var nearest = nearestTrees.nearest(colonyCoord, 1);
+          var colonyCoord = {
+            coordinates: [nextColonyPosition[0], nextColonyPosition[1], nextColonyPosition[2]],
+            radius: curData.radius
+          };
 
-        if(nearest.length > 0 && nearest[0][1] < curRadius) {
-          continue;
+          var nearest = nearestTrees.nearest(colonyCoord, 1);
+          if(nearest.length > 0 && nearest[0][1] < curData.radius) {
+            continue;
+          }
+
+          nearestTrees.insert(colonyCoord);
+          let unit: Unit = new Unit(this.geometry, this.seed, nextColonyPosition, this.up, curData.radius);
+
+          queue.push({center: vec3.fromValues(nextColonyPosition[0], nextColonyPosition[1], nextColonyPosition[2]),
+                      radius: curData.radius * 0.8,
+                      distance: curData.distance * 0.5,
+                      level: curData.level + 1});
         }
-
-        nearestTrees.insert(colonyCoord);
-        let unit: Unit = new Unit(this.geometry, this.seed, nextColonyPosition, this.up, this.radius);
       }
     }
-    //let unit: Unit = new Unit(this.geometry, this.seed, this.center, this.up, this.radius);
   }
 }
 
