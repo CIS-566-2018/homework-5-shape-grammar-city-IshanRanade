@@ -30,6 +30,7 @@ class World {
     trans['door'] = mat4.create();
     trans['crater'] = mat4.create();
     trans['road'] = mat4.create();
+    trans['dome'] = mat4.create();
 
     trans['platform'] = mat4.create();
     mat4.scale(trans['platform'], trans['platform'], vec3.fromValues(0.2,1.0,0.2));
@@ -60,12 +61,27 @@ class World {
     });
   }
 
-  getDrawables() {
+  getOpaqueDrawables() {
     let drawables: Array<Drawable> = [];
     
     this.types.forEach(type => {
-      let drawable: OBJGeometry = this.drawableGeometry[type];
-      drawables.push(this.drawableGeometry[type]);
+      if(this.drawableGeometry[type].buildingPart != "dome") {
+        let drawable: OBJGeometry = this.drawableGeometry[type];
+        drawables.push(this.drawableGeometry[type]);
+      }
+    });
+
+    return drawables;
+  }
+
+  getAlphaDrawables() {
+    let drawables: Array<Drawable> = [];
+    
+    this.types.forEach(type => {
+      if(this.drawableGeometry[type].buildingPart == "dome") {
+        let drawable: OBJGeometry = this.drawableGeometry[type];
+        drawables.push(this.drawableGeometry[type]);
+      }
     });
 
     return drawables;

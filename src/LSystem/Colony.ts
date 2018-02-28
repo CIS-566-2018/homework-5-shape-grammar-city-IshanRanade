@@ -23,7 +23,10 @@ class Colony {
   }
 
   generate() {
+    let domeScale: number = 3.3;
     this.geometry['crater'].add(vec4.fromValues(0,0,0,0), vec4.fromValues(0,0,0,1), vec4.fromValues(this.radius,this.radius,this.radius,this.radius));
+    this.geometry['dome'].add(vec4.fromValues(0,0,0,0), vec4.fromValues(0,0,0,1), vec4.fromValues(this.radius*domeScale,this.radius*domeScale,this.radius*domeScale,this.radius));
+
 
     let r = this.radius * 0.8;
     var distance = function(a: any, b: any){

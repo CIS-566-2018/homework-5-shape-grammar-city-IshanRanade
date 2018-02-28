@@ -23,7 +23,8 @@ window.onload = function() {
     'door': 'src/objs/door.obj',
     'crater': 'src/objs/crater.obj',
     'road': 'src/objs/road.obj',
-    'platform': 'src/objs/platform.obj'
+    'platform': 'src/objs/platform.obj',
+    'dome': 'src/objs/dome.obj'
   }, function(m: any) {
     meshes = m;
     main();
@@ -65,7 +66,7 @@ let tank: OBJGeometry;
 let door: OBJGeometry;
 
 let world: World;
-let types: string[] = ['tank', 'base', 'door', 'crater', 'road', 'platform'];
+let types: string[] = ['tank', 'base', 'door', 'crater', 'road', 'platform', 'dome'];
 
 function loadScene() {
   world = new World(meshes, types, vec3.fromValues(0,0,0), vec3.fromValues(0,1,0), seedrandom(seed));
@@ -105,8 +106,10 @@ function main() {
   const camera = new Camera(vec3.fromValues(10,10,10), vec3.fromValues(0, 0, 0));
 
   const renderer = new OpenGLRenderer(canvas);
-  renderer.setClearColor(1,1,1,1);
+  renderer.setClearColor(0,0,0,1);
   gl.enable(gl.DEPTH_TEST);
+  gl.enable(gl.BLEND);
+  gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
   const lambert = new ShaderProgram([
     new Shader(gl.VERTEX_SHADER, require('./shaders/lambert-vert.glsl')),
@@ -127,8 +130,10 @@ function main() {
 
     //renderer.render(camera, backgroundShader, [
     //]);
-
-    renderer.render(camera, lambert, world.getDrawables());
+    renderer.render(camera, lambert, world.getOpaqueDrawables());
+    renderer.render(camera, lambert, world.getAlphaDrawables());
+    
+    
 
     stats.end();
 
