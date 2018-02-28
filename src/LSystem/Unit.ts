@@ -21,8 +21,7 @@ class Unit {
   }
 
   generate() {
-    this.geometry['platform'].add(vec4.fromValues(0,0,0,0), vec4.fromValues(0,0,0,1), vec4.fromValues(1,1,1,1));
-
+    this.geometry['platform'].add(vec4.fromValues(this.center[0], this.center[1], this.center[2], 1), vec4.fromValues(0,0,0,1), vec4.fromValues(this.radius,this.radius,this.radius,1));
   }
 }
 

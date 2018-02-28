@@ -68,7 +68,7 @@ let world: World;
 let types: string[] = ['tank', 'base', 'door', 'crater', 'road', 'platform'];
 
 function loadScene() {
-  world = new World(meshes, types, vec3.fromValues(0,0,0), vec3.fromValues(0,1,0), seed);
+  world = new World(meshes, types, vec3.fromValues(0,0,0), vec3.fromValues(0,1,0), seedrandom(seed));
   world.create();
 
   seed++;
