@@ -39,8 +39,8 @@ class World {
     trans['ground'] = mat4.create();
     trans['walkway'] = mat4.create();
     mat4.scale(trans['walkway'], trans['walkway'], vec3.fromValues(0.5,0.5,0.5));
-
-    //mat4.scale(trans['ground'], trans['ground'], vec3.fromValues(1000000,1,1000000));
+    trans['rover'] = mat4.create();
+    mat4.scale(trans['rover'], trans['rover'], vec3.fromValues(0.5,0.5,0.5));
 
     // Set the colors for each type of geometry
     let colors: { [key:string]:vec4; } = {};
@@ -62,6 +62,8 @@ class World {
     vec4.scale(colors['ground'], colors['ground'], 1/255.0);
     colors['walkway'] = vec4.fromValues(255,255,255,255.0);
     vec4.scale(colors['walkway'], colors['walkway'], 1/255.0);
+    colors['rover'] = vec4.fromValues(255,255,255,255.0);
+    vec4.scale(colors['rover'], colors['rover'], 1/255.0);
 
     this.types.forEach(type => {
       this.drawableGeometry[type] = new OBJGeometry(vec3.fromValues(0,0,0), meshes, type, colors[type], trans[type]);
@@ -84,7 +86,7 @@ class World {
                                 vec4.fromValues(1000,1000,1000,1));
 
 
-    let firstRadius = 50;
+    let firstRadius = 30;
     let colony: Colony = new Colony(this.geometry, this.seed, vec3.fromValues(0,0,0), this.up, firstRadius);
     var firstColonyCoord = {
       coordinates: [this.center[0], this.center[1], this.center[2]],
