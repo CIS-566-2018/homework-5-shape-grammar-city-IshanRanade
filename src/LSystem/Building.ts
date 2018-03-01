@@ -159,9 +159,27 @@ class Building {
   }
 
   add(type: string, translate: vec3, rotation: quat, scale: vec3) {
+    let color: vec4 = vec4.create();
+    if(type == "door") {
+      color = vec4.fromValues(125, 125, 125, 255);
+    } else if(type == "base") {
+      color = vec4.fromValues(125, 125, 125, 255);
+    } else if(type == "base") {
+      color = vec4.fromValues(125, 125, 125, 255);
+    } else if(type == "base") {
+      color = vec4.fromValues(125, 125, 125, 255);
+    } else {
+      color = vec4.fromValues(125, 125, 125, 255);
+    }
+
+    vec4.scale(color, color, 1/255.0);
+
+
+
     this.geometry[type].add(vec4.fromValues(this.center[0] + translate[0], this.center[1] + translate[1] + this.radius, this.center[2] + translate[2], 1),
                             vec4.fromValues(rotation[0], rotation[1], rotation[2], rotation[3]),
-                            vec4.fromValues(this.radius * scale[0], this.radius * scale[1], this.radius * scale[2], 1));
+                            vec4.fromValues(this.radius * scale[0], this.radius * scale[1], this.radius * scale[2], 1),
+                            color);
   }
 }
 

@@ -29,7 +29,10 @@ uniform float u_IsInstance;
 
 in vec4 vs_Translation;
 in vec4 vs_Quaternion;
-in vec3 vs_Scale;
+in vec4 vs_Scale;
+in vec4 vs_InstanceColor;
+
+in float u_Time;
 
 out vec4 fs_Nor;            // The array of normals that has been transformed by u_ModelInvTr. This is implicitly passed to the fragment shader.
 out vec4 fs_LightVec;       // The direction in which our virtual light lies, relative to each vertex. This is implicitly passed to the fragment shader.
@@ -63,6 +66,8 @@ void main()
       newPos += vec3(vs_Translation);
 
       modelposition = vec4(newPos, 1.f);
+      
+      fs_Col = vs_InstanceColor;
     }
 
     fs_LightVec = lightPos - modelposition;  // Compute the direction in which the light source lies

@@ -81,9 +81,13 @@ class World {
 
   generate() {
     // Add the ground plane
+    let groundColor: vec4 = vec4.fromValues(125, 125, 125, 255);
+    vec4.scale(groundColor, groundColor, 1/255.0);
+
     this.geometry['ground'].add(vec4.fromValues(this.center[0], this.center[1] - 1.455, this.center[2], 1),
                                 vec4.fromValues(0, 0, 0, 1), 
-                                vec4.fromValues(1000,1000,1000,1));
+                                vec4.fromValues(1000,1000,1000,1),
+                                groundColor);
 
 
     let firstRadius = 30;
@@ -133,7 +137,7 @@ class World {
 
   create() {
     this.types.forEach(type => {
-      this.drawableGeometry[type].setInstanceProperties(this.geometry[type].translations, this.geometry[type].quaternions, this.geometry[type].scales, this.geometry[type].translations.length / 4);
+      this.drawableGeometry[type].setInstanceProperties(this.geometry[type].translations, this.geometry[type].quaternions, this.geometry[type].scales, this.geometry[type].colors, this.geometry[type].translations.length / 4);
       this.drawableGeometry[type].create();
     });
   }

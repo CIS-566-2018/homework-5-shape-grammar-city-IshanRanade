@@ -21,7 +21,10 @@ class Unit {
   }
 
   generate() {
-    this.geometry['platform'].add(vec4.fromValues(this.center[0], this.center[1], this.center[2], 1), vec4.fromValues(0,0,0,1), vec4.fromValues(this.radius,this.radius,this.radius,1));
+    let platformColor: vec4 = vec4.fromValues(2170, 196, 239, 255);
+    vec4.scale(platformColor, platformColor, 1/255.0);
+
+    this.geometry['platform'].add(vec4.fromValues(this.center[0], this.center[1], this.center[2], 1), vec4.fromValues(0,0,0,1), vec4.fromValues(this.radius,this.radius,this.radius,1), platformColor);
   
     let building: Building = new Building(this.geometry, this.seed, this.center, this.up, this.radius/10);
   }
