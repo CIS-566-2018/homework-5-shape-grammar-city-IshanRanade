@@ -71,7 +71,7 @@ void main()
       modelposition = vec4(newPos, 1.f);
 
       if(vs_InstanceId[0] > 0.f) {
-        modelposition += vec4(cos(u_Time * rand(vs_InstanceId[0])/10.f)/5.f, cos(u_Time * rand(vs_InstanceId[0])/10.f)/5.f, sin(u_Time * rand(vs_InstanceId[0])/10.f)/5.f, 0);
+        modelposition += vec4(rand(vs_InstanceId[0]) * cos(u_Time * 2.f * rand(vs_InstanceId[0])/10.f)/5.f, 3.f * rand(vs_InstanceId[0]) * cos(u_Time * 2.f * rand(vs_InstanceId[0])/10.f)/5.f, rand(vs_InstanceId[0]) * sin(u_Time * 2.f * rand(vs_InstanceId[0])/10.f)/5.f, 0);
       }
       
       //float time = u_Time;
