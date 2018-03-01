@@ -62,6 +62,6 @@ I heavily utilized instancing to increase the performance of the application.  I
 
 On my Mac I am able to get it to run consistently around 30 FPS, and on computers with a better graphics card I would imagine it would be even higher.
 
-## Node
+## Note
 
 Be sure to zoom out and take a look at the landscape as a whole.  Also keep in mind that there are a number of colonies around where the camera starts.  Each one varies in size and there are a few very tiny ones if you can find them.  They are all fun to look at and zoom in to.  They are all relatively close to the camera start position, you shouldn't have to search around very long.  Also each of these colonies have different color schemes.
