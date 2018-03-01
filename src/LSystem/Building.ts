@@ -40,13 +40,15 @@ class Building {
       'translation': vec3.fromValues(0,0,0),
       'rotation': quat.create(),
       'scale': vec3.fromValues(1,1,1),
-      'level': 0
+      'level': 0,
+      'floor': 0
     });
 
+    let maxIterations: number = 6;
     while(queue.length > 0) {
       let curData = queue.pop();
 
-      if(curData.level < 6) {
+      if(curData.level < maxIterations) {
 
         if(curData.type == 'base') {
           let r1: number = this.seed();
@@ -54,7 +56,7 @@ class Building {
           this.add('base', curData.translation, curData.rotation, vec3.fromValues(1,1,1));
 
           // Add a walkway
-          if(r1 < 0.8) {
+          if(r1 < 0.9) {
             let r2 = this.seed();
 
             let degrees: number = 90 * Math.floor(this.seed() * 360 / 90);
@@ -75,14 +77,17 @@ class Building {
             vec3.scale(newTranslation, newTranslation, 3.0 * this.radius);
             vec3.add(newTranslation, newTranslation, curData.translation);
 
-            this.add('walkway', curData.translation, prevQuat, vec3.fromValues(1,1,1));
+            if(curData.level + 1 < maxIterations) {
+              this.add('walkway', curData.translation, prevQuat, vec3.fromValues(1,1,1));
+            }
 
             queue.push({
               'type': 'base',
               'translation': newTranslation,
               'rotation': prevQuat,
               'scale': vec3.fromValues(1,1,1),
-              'level': curData.level + 1
+              'level': curData.level + 1,
+              'floor': curData.floor + 1
             });
 
             queue.push({
@@ -90,7 +95,8 @@ class Building {
               'translation': vec3.fromValues(newTranslation[0], newTranslation[1] + 1.0 * this.radius, newTranslation[2]),
               'rotation': quat.fromValues(prevQuat[0], prevQuat[1], prevQuat[2], prevQuat[3]),
               'scale': vec3.fromValues(1,1,1),
-              'level': curData.level + 1
+              'level': curData.level + 1,
+              'floor': curData.floor
             });
 
             let walkWayTranslation: vec3 = vec3.create();
@@ -106,42 +112,47 @@ class Building {
               'translation': walkWayTranslation,
               'rotation': walkwayQuat,
               'scale': vec3.fromValues(1,1,1),
-              'level': curData.level + 1
+              'level': curData.level + 1,
+              'floor': -1
             });
           }
         } else if(curData.type == "walkway") {
-          let r2 = this.seed();
+          if(true) {
+            let r2 = this.seed();
 
-          let degrees: number = 90;
+            if(r2 < 0.2) {
+              let degrees: number = 90;
 
-          // if(r2 < 0.5) {
-          //   degrees = 90;
-          // } else {
-          //   degrees = -90;
-          // }
+              // if(r2 < 0.5) {
+              //   degrees = 90;
+              // } else {
+              //   degrees = -90;
+              // }
 
-          let prevQuat: quat = quat.create();
-          quat.copy(prevQuat, curData.rotation);
-          quat.rotateY(prevQuat, prevQuat, degrees * Math.PI / 180);
+              let prevQuat: quat = quat.create();
+              quat.copy(prevQuat, curData.rotation);
+              quat.rotateY(prevQuat, prevQuat, degrees * Math.PI / 180);
 
-          let newAim: vec3 = vec3.create();
-          //vec3.transformQuat(newAim, vec3.fromV alues(1,0,0), prevQuat);
+              let newAim: vec3 = vec3.create();
+              vec3.transformQuat(newAim, vec3.fromValues(1,0,0), prevQuat);
 
-          let newTranslation: vec3 = vec3.create();
-          vec3.copy(newTranslation, newAim);
-          vec3.scale(newTranslation, newTranslation, 1.0 * this.radius);
-          vec3.add(newTranslation, newTranslation, curData.translation);
+              let newTranslation: vec3 = vec3.create();
+              vec3.copy(newTranslation, newAim);
+              vec3.scale(newTranslation, newTranslation, 1.0 * this.radius);
+              vec3.add(newTranslation, newTranslation, curData.translation);
 
-          //this.add('rover', newTranslation, prevQuat, vec3.fromValues(1,1,1));
+              this.add('rover', newTranslation, prevQuat, vec3.fromValues(1,1,1));
+            }
 
-          // queue.push({
-          //   'type': 'base',
-          //   'translation': newTranslation,
-          //   'rotation': prevQuat,
-          //   'scale': vec3.fromValues(1,1,1),
-          //   'aim': vec3.fromValues(newAim[0], newAim[1], newAim[2]),
-          //   'level': curData.level + 1
-          // });
+            // queue.push({
+            //   'type': 'base',
+            //   'translation': newTranslation,
+            //   'rotation': prevQuat,
+            //   'scale': vec3.fromValues(1,1,1),
+            //   'aim': vec3.fromValues(newAim[0], newAim[1], newAim[2]),
+            //   'level': curData.level + 1
+            // });
+          }
         }
       }
     }
