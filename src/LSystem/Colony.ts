@@ -98,6 +98,7 @@ class Colony {
 
           let roadColor: vec4 = vec4.fromValues(208, 216, 229,255.0);
           vec4.scale(roadColor, roadColor, 1/255.0);
+          //vec4.scale(roadColor, roadColor, )
           this.geometry['road'].add(vec4.fromValues(translation[0], translation[1], translation[2], 1),
                                     vec4.fromValues(q[0], q[1], q[2], q[3]), 
                                     vec4.fromValues(vec3.distance(nextColonyPosition, curData.center) * 0.15,0.4 * curData.radius,0.1 * vec3.distance(nextColonyPosition, curData.center),1),

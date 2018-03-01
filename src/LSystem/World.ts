@@ -104,7 +104,7 @@ class World {
       radius: firstRadius
     });
 
-    let iterations: number = 15;
+    let iterations: number = 10;
     let maxDistance: number = 180;
     for(let i: number = 0; i < iterations; ++i) {
       let aim: vec3 = vec3.fromValues(1,0,0);
