@@ -90,7 +90,7 @@ class World {
                                 groundColor);
 
 
-    let firstRadius = 30;
+    let firstRadius = 10;
     let colony: Colony = new Colony(this.geometry, this.seed, vec3.fromValues(0,0,0), this.up, firstRadius);
     var firstColonyCoord = {
       coordinates: [this.center[0], this.center[1], this.center[2]],
@@ -103,8 +103,8 @@ class World {
       radius: firstRadius
     });
 
-    let iterations: number = 4;
-    let maxDistance: number = 10;
+    let iterations: number = 15;
+    let maxDistance: number = 180;
     for(let i: number = 0; i < iterations; ++i) {
       let aim: vec3 = vec3.fromValues(1,0,0);
       let degrees: number = this.seed() * 360;
