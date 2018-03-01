@@ -17,6 +17,8 @@ class Building {
 
   lSystem: LSystem;
 
+  static id: number = 1;
+
   constructor(geometry: { [key:string]:PropertyHolder; }, seed: any, center: vec3, up: vec3, radius: number) {
     this.geometry = geometry;
     this.center = center;
@@ -138,8 +140,9 @@ class Building {
 
               let newTranslation: vec3 = vec3.create();
               vec3.copy(newTranslation, newAim);
-              vec3.scale(newTranslation, newTranslation, 1.0 * this.radius);
+              vec3.scale(newTranslation, newTranslation, 2.0 * this.radius);
               vec3.add(newTranslation, newTranslation, curData.translation);
+              newTranslation[1] += this.radius * 50;
 
               this.add('rover', newTranslation, prevQuat, vec3.fromValues(1,1,1));
             }
@@ -174,12 +177,20 @@ class Building {
 
     vec4.scale(color, color, 1/255.0);
 
+    let thisId: number;
 
+    if(type == "rover") {
+      thisId = Building.id;
+      Building.id += 1;
+    } else {
+      thisId = 0;
+    }
 
     this.geometry[type].add(vec4.fromValues(this.center[0] + translate[0], this.center[1] + translate[1] + this.radius, this.center[2] + translate[2], 1),
                             vec4.fromValues(rotation[0], rotation[1], rotation[2], rotation[3]),
                             vec4.fromValues(this.radius * scale[0], this.radius * scale[1], this.radius * scale[2], 1),
-                            color);
+                            color,
+                            vec4.fromValues(thisId, thisId, thisId, thisId));
   }
 }
 

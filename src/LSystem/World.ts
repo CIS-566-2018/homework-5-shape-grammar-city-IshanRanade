@@ -87,7 +87,8 @@ class World {
     this.geometry['ground'].add(vec4.fromValues(this.center[0], this.center[1] - 1.455, this.center[2], 1),
                                 vec4.fromValues(0, 0, 0, 1), 
                                 vec4.fromValues(1000,1000,1000,1),
-                                groundColor);
+                                groundColor,
+                                vec4.fromValues(0,0,0,0));
 
 
     let firstRadius = 10;
@@ -137,7 +138,7 @@ class World {
 
   create() {
     this.types.forEach(type => {
-      this.drawableGeometry[type].setInstanceProperties(this.geometry[type].translations, this.geometry[type].quaternions, this.geometry[type].scales, this.geometry[type].colors, this.geometry[type].translations.length / 4);
+      this.drawableGeometry[type].setInstanceProperties(this.geometry[type].translations, this.geometry[type].quaternions, this.geometry[type].scales, this.geometry[type].colors, this.geometry[type].ids, this.geometry[type].translations.length / 4);
       this.drawableGeometry[type].create();
     });
   }

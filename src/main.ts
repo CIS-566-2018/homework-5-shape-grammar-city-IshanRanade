@@ -35,7 +35,7 @@ window.onload = function() {
 }
 
 var seedrandom = require('seedrandom');
-let time: number = 0;
+let time: number = 1;
 
 // Define an object with application parameters and button callbacks
 // This will be referred to by dat.GUI's functions that add GUI elements.
@@ -131,22 +131,18 @@ function main() {
     stats.begin();
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
-    
-    lambert.setTime(time);
 
     //renderer.render(camera, backgroundShader, [
     //]);
-    renderer.render(camera, lambert, world.getOpaqueDrawables());
-    renderer.render(camera, lambert, world.getAlphaDrawables());
+    renderer.render(camera, lambert, world.getOpaqueDrawables(), time);
+    renderer.render(camera, lambert, world.getAlphaDrawables(), time);
     
-    
+    time++;
 
     stats.end();
 
     // Tell the browser to call `tick` again whenever it renders a new frame
     requestAnimationFrame(tick);
-
-    time++;
   }
 
   window.addEventListener('resize', function() {

@@ -12,6 +12,7 @@ abstract class Drawable {
   bufQuaternions: WebGLBuffer;
   bufScales: WebGLBuffer;
   bufInstanceColors: WebGLBuffer;
+  bufInstanceIds: WebGLBuffer;
 
   idxBound: boolean = false;
   posBound: boolean = false;
@@ -22,6 +23,7 @@ abstract class Drawable {
   quaternionsBound: boolean = false;
   scalesBound: boolean = false;
   instanceColorsBound: boolean = false;
+  instanceIdsBound: boolean = false;
 
   isInstanced: boolean = false;
   instances: number = 0;
@@ -37,6 +39,7 @@ abstract class Drawable {
     gl.deleteBuffer(this.bufQuaternions);
     gl.deleteBuffer(this.bufScales);
     gl.deleteBuffer(this.bufInstanceColors);
+    gl.deleteBuffer(this.bufInstanceIds);
   }
 
   generateIdx() {
@@ -77,6 +80,11 @@ abstract class Drawable {
   generateInstanceColors() {
     this.instanceColorsBound = true;
     this.bufInstanceColors = gl.createBuffer();
+  }
+
+  generateInstanceIds() {
+    this.instanceIdsBound = true;
+    this.bufInstanceIds = gl.createBuffer();
   }
 
   bindIdx(): boolean {
@@ -137,6 +145,14 @@ abstract class Drawable {
     }
 
     return this.instanceColorsBound;
+  }
+
+  bindInstanceIds(): boolean {
+    if (this.instanceIdsBound) {
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.bufInstanceIds);
+    }
+
+    return this.instanceIdsBound;
   }
 
   elemCount(): number {

@@ -35,8 +35,8 @@ class Colony {
     let domeColor: vec4 = vec4.fromValues(125, 125, 125, 125);
     vec4.scale(domeColor, domeColor, 1/255.0);
 
-    this.geometry['crater'].add(vec4.fromValues(this.center[0], this.center[1], this.center[2], 1), vec4.fromValues(colonyRotation[0],colonyRotation[1],colonyRotation[2],colonyRotation[3]), vec4.fromValues(this.radius,this.radius,this.radius,this.radius), craterColor);
-    this.geometry['dome'].add(vec4.fromValues(this.center[0], this.center[1], this.center[2], 1), vec4.fromValues(colonyRotation[0],colonyRotation[1],colonyRotation[2],colonyRotation[3]), vec4.fromValues(this.radius*domeScale,this.radius*domeScale,this.radius*domeScale,this.radius), domeColor);
+    this.geometry['crater'].add(vec4.fromValues(this.center[0], this.center[1], this.center[2], 1), vec4.fromValues(colonyRotation[0],colonyRotation[1],colonyRotation[2],colonyRotation[3]), vec4.fromValues(this.radius,this.radius,this.radius,this.radius), craterColor, vec4.fromValues(0,0,0,0));
+    this.geometry['dome'].add(vec4.fromValues(this.center[0], this.center[1], this.center[2], 1), vec4.fromValues(colonyRotation[0],colonyRotation[1],colonyRotation[2],colonyRotation[3]), vec4.fromValues(this.radius*domeScale,this.radius*domeScale,this.radius*domeScale,this.radius), domeColor, vec4.fromValues(0,0,0,0));
 
 
     let r = this.radius * 0.8;
@@ -101,7 +101,8 @@ class Colony {
           this.geometry['road'].add(vec4.fromValues(translation[0], translation[1], translation[2], 1),
                                     vec4.fromValues(q[0], q[1], q[2], q[3]), 
                                     vec4.fromValues(vec3.distance(nextColonyPosition, curData.center) * 0.15,0.4 * curData.radius,0.1 * vec3.distance(nextColonyPosition, curData.center),1),
-                                    roadColor);
+                                    roadColor,
+                                    vec4.fromValues(0,0,0,0));
 
           nearestTrees.insert({
             coordinates: [translation[0], translation[1], translation[2]],

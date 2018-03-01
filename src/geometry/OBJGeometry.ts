@@ -13,6 +13,7 @@ class OBJGeometry extends Drawable {
   quaternions: Float32Array;
   scales: Float32Array;
   instanceColors: Float32Array;
+  instanceIds: Float32Array;
 
   instances: number = 0;
 
@@ -31,11 +32,12 @@ class OBJGeometry extends Drawable {
     this.model = model;
   }
 
-  setInstanceProperties(translations: number[], quaternions: number[], scales: number[], colors: number[], numInstances: number) {
+  setInstanceProperties(translations: number[], quaternions: number[], scales: number[], colors: number[], ids: number[], numInstances: number) {
     this.translations = new Float32Array(translations);
     this.quaternions = new Float32Array(quaternions);
     this.scales = new Float32Array(scales);
     this.instanceColors = new Float32Array(colors);
+    this.instanceIds = new Float32Array(ids);
     this.instances = numInstances;
   }
 
@@ -75,6 +77,7 @@ class OBJGeometry extends Drawable {
     this.generateQuaternions();
     this.generateScales();
     this.generateInstanceColors();
+    this.generateInstanceIds();
 
     this.count = this.indices.length;
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.bufIdx);
@@ -100,6 +103,9 @@ class OBJGeometry extends Drawable {
 
     gl.bindBuffer(gl.ARRAY_BUFFER, this.bufInstanceColors);
     gl.bufferData(gl.ARRAY_BUFFER, this.instanceColors, gl.STATIC_DRAW);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.bufInstanceIds);
+    gl.bufferData(gl.ARRAY_BUFFER, this.instanceIds, gl.STATIC_DRAW);
   }
 };
 

@@ -29,6 +29,7 @@ class ShaderProgram {
   attrQuaternion: number;
   attrScale: number;
   attrInstanceColor: number;
+  attrInstanceId: number;
 
   unifModel: WebGLUniformLocation;
   unifModelInvTr: WebGLUniformLocation;
@@ -58,6 +59,7 @@ class ShaderProgram {
     this.attrQuaternion = gl.getAttribLocation(this.prog, "vs_Quaternion");
     this.attrScale = gl.getAttribLocation(this.prog, "vs_Scale");
     this.attrInstanceColor = gl.getAttribLocation(this.prog, "vs_InstanceColor");
+    this.attrInstanceId = gl.getAttribLocation(this.prog, "vs_InstanceId");
 
     this.unifModel      = gl.getUniformLocation(this.prog, "u_Model");
     this.unifModelInvTr = gl.getUniformLocation(this.prog, "u_ModelInvTr");
@@ -169,6 +171,12 @@ class ShaderProgram {
         gl.vertexAttribDivisor(this.attrInstanceColor, 1);
       }
 
+      if(this.attrInstanceId != -1 && d.bindInstanceIds()) {
+        gl.enableVertexAttribArray(this.attrInstanceId);
+        gl.vertexAttribPointer(this.attrInstanceId, 4, gl.FLOAT, false, 16, 0);
+        gl.vertexAttribDivisor(this.attrInstanceId, 1);
+      }
+
       d.bindIdx();
       gl.drawElementsInstanced(d.drawMode(), d.elemCount(), gl.UNSIGNED_INT, 0, d.instances);
     } else {
@@ -183,6 +191,8 @@ class ShaderProgram {
     if (this.attrTranslation != -1) gl.disableVertexAttribArray(this.attrTranslation);
     if (this.attrQuaternion != -1) gl.disableVertexAttribArray(this.attrQuaternion);
     if (this.attrScale != -1) gl.disableVertexAttribArray(this.attrScale);
+    if (this.attrInstanceColor != -1) gl.disableVertexAttribArray(this.attrInstanceColor);
+    if (this.attrInstanceId != -1) gl.disableVertexAttribArray(this.attrInstanceId);
   }
 };
 
