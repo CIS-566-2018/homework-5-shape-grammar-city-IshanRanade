@@ -29,7 +29,7 @@ class Colony {
 
     let domeScale: number = 3.3;
 
-    let craterColor: vec4 = vec4.fromValues(125, 125, 125, 255);
+    let craterColor: vec4 = vec4.fromValues(232, 104, 97, 255);
     vec4.scale(craterColor, craterColor, 1/255.0);
 
     let domeColor: vec4 = vec4.fromValues(125, 125, 125, 125);
@@ -96,13 +96,27 @@ class Colony {
           vec3.add(translation, curData.center, nextColonyPosition);
           vec3.scale(translation, translation, 0.5);
 
-          let roadColor: vec4 = vec4.fromValues(208, 216, 229,255.0);
-          vec4.scale(roadColor, roadColor, 1/255.0);
+          let r1: vec3 = vec3.fromValues(0,255,0);
+          let r2: vec3 = vec3.fromValues(0,0,255);
+
+          let u = 1.0 - (1/curData.radius);
+
+          let roadColor: vec3 = vec3.create();
+
+          let lhs: vec3 = vec3.create();
+          vec3.scale(lhs, r1, 1-u);
+
+          let rhs: vec3 = vec3.create();
+          vec3.scale(rhs, r2, u);
+
+          vec3.add(roadColor, lhs, rhs);
+
+          vec3.scale(roadColor, roadColor, 1/255.0);
           //vec4.scale(roadColor, roadColor, )
           this.geometry['road'].add(vec4.fromValues(translation[0], translation[1], translation[2], 1),
                                     vec4.fromValues(q[0], q[1], q[2], q[3]), 
                                     vec4.fromValues(vec3.distance(nextColonyPosition, curData.center) * 0.15,0.4 * curData.radius,0.1 * vec3.distance(nextColonyPosition, curData.center),1),
-                                    roadColor,
+                                    vec4.fromValues(roadColor[0], roadColor[1], roadColor[2], 1),
                                     vec4.fromValues(0,0,0,0));
 
           nearestTrees.insert({

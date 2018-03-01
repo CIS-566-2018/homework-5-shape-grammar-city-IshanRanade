@@ -55,7 +55,11 @@ class Building {
         if(curData.type == 'base') {
           let r1: number = this.seed();
 
-          this.add('base', curData.translation, curData.rotation, vec3.fromValues(1,1,1));
+          if(r1 < 0.5) {
+            this.add('base', curData.translation, curData.rotation, vec3.fromValues(1,1,1), this.radius, this.radius * curData.level);
+          } else {
+            this.add('tank', curData.translation, curData.rotation, vec3.fromValues(1,1,1), this.radius, this.radius * curData.level);
+          }
 
           // Add a walkway
           if(r1 < 0.9) {
@@ -80,7 +84,7 @@ class Building {
             vec3.add(newTranslation, newTranslation, curData.translation);
 
             if(curData.level + 1 < maxIterations) {
-              this.add('walkway', curData.translation, prevQuat, vec3.fromValues(1,1,1));
+              this.add('walkway', curData.translation, prevQuat, vec3.fromValues(1,1,1), this.radius, this.radius * curData.level);
             }
 
             queue.push({
@@ -144,7 +148,7 @@ class Building {
               vec3.add(newTranslation, newTranslation, curData.translation);
               newTranslation[1] += this.radius * 50;
 
-              this.add('rover', newTranslation, prevQuat, vec3.fromValues(1,1,1));
+              this.add('rover', newTranslation, prevQuat, vec3.fromValues(1,1,1), this.radius, this.radius * curData.level);
             }
 
             // queue.push({
@@ -161,21 +165,56 @@ class Building {
     }
   }
 
-  add(type: string, translate: vec3, rotation: quat, scale: vec3) {
-    let color: vec4 = vec4.create();
-    if(type == "door") {
-      color = vec4.fromValues(125, 125, 125, 255);
-    } else if(type == "base") {
-      color = vec4.fromValues(125, 125, 125, 255);
-    } else if(type == "base") {
-      color = vec4.fromValues(125, 125, 125, 255);
-    } else if(type == "base") {
-      color = vec4.fromValues(125, 125, 125, 255);
+  add(type: string, translate: vec3, rotation: quat, scale: vec3, globalR: number, r: number) {
+    let r1: vec3 = vec3.create();
+    let r2: vec3 = vec3.create();
+
+    if(type == "base") {
+      r1 = vec3.fromValues(255,0,0);
+      r2 = vec3.fromValues(0,255,0);
+    } else if(type == "walkway") {
+      r1 = vec3.fromValues(255,0,0);
+      r2 = vec3.fromValues(0,255,0);
+    } else if(type == "rover") {
+      r1 = vec3.fromValues(255,0,0);
+      r2 = vec3.fromValues(0,255,0);
     } else {
-      color = vec4.fromValues(125, 125, 125, 255);
+      r1 = vec3.fromValues(255,0,0);
+      r2 = vec3.fromValues(0,255,0);
     }
 
-    vec4.scale(color, color, 1/255.0);
+    let u = 1.0 - (1/globalR/10);
+
+    let color: vec3 = vec3.create();
+
+    let lhs: vec3 = vec3.create();
+    vec3.scale(lhs, r1, 1-u);
+
+    let rhs: vec3 = vec3.create();
+    vec3.scale(rhs, r2, u);
+
+    vec3.add(color, lhs, rhs);
+
+    vec3.scale(color, color, 1/255.0);
+
+
+    let localr1: vec3 = vec3.fromValues(255,255,255);
+    let localr2: vec3 = vec3.fromValues(0,0,0);
+
+    let localu = 1.0 - (r/100000);
+
+    let locallhs: vec3 = vec3.create();
+    vec3.scale(locallhs, localr1, 1-localu);
+
+    let localrhs: vec3 = vec3.create();
+    vec3.scale(localrhs, localr2, localu);
+
+    let localColor: vec3 = vec3.create();
+    vec3.add(localColor, locallhs, localrhs);
+
+    let finalColor: vec3 = vec3.create();
+    vec3.add(finalColor, localColor, color);
+    vec3.scale(finalColor, finalColor, 0.5);
 
     let thisId: number;
 
@@ -189,7 +228,7 @@ class Building {
     this.geometry[type].add(vec4.fromValues(this.center[0] + translate[0], this.center[1] + translate[1] + this.radius, this.center[2] + translate[2], 1),
                             vec4.fromValues(rotation[0], rotation[1], rotation[2], rotation[3]),
                             vec4.fromValues(this.radius * scale[0], this.radius * scale[1], this.radius * scale[2], 1),
-                            color,
+                            vec4.fromValues(finalColor[0], finalColor[1], finalColor[2], 1),
                             vec4.fromValues(thisId, thisId, thisId, thisId));
   }
 }

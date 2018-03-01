@@ -28,6 +28,7 @@ class World {
     this.drawableGeometry = {};
     let trans: { [key:string]:mat4; } = {};
     trans['tank'] = mat4.create();
+    mat4.scale(trans['tank'], trans['tank'], vec3.fromValues(0.5, 1, 0.5));
     trans['base'] = mat4.create();
     mat4.scale(trans['base'], trans['base'], vec3.fromValues(0.45,0.35,0.6));
     trans['door'] = mat4.create();
@@ -81,7 +82,7 @@ class World {
 
   generate() {
     // Add the ground plane
-    let groundColor: vec4 = vec4.fromValues(125, 125, 125, 255);
+    let groundColor: vec4 = vec4.fromValues(232, 104, 97, 255);
     vec4.scale(groundColor, groundColor, 1/255.0);
 
     this.geometry['ground'].add(vec4.fromValues(this.center[0], this.center[1] - 1.455, this.center[2], 1),
