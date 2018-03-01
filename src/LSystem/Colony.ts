@@ -29,7 +29,7 @@ class Colony {
 
     let domeScale: number = 3.3;
 
-    let craterColor: vec4 = vec4.fromValues(232, 104, 97, 255);
+    let craterColor: vec4 = vec4.fromValues(209, 80, 41, 255);
     vec4.scale(craterColor, craterColor, 1/255.0);
 
     let domeColor: vec4 = vec4.fromValues(125, 125, 125, 125);
@@ -96,8 +96,8 @@ class Colony {
           vec3.add(translation, curData.center, nextColonyPosition);
           vec3.scale(translation, translation, 0.5);
 
-          let r1: vec3 = vec3.fromValues(0,255,0);
-          let r2: vec3 = vec3.fromValues(0,0,255);
+          let r2: vec3 = vec3.fromValues(255,255,255);
+          let r1: vec3 = vec3.fromValues(0,0,0);
 
           let u = 1.0 - (1/curData.radius);
 

@@ -107,7 +107,7 @@ function main() {
 
   //let cameraPos: vec3 = vec3.fromValues(0, 25, -200);
   //vec3.rotateY(cameraPos, cameraPos, vec3.fromValues(0,0,0), 290 * Math.PI / 180.0);
-  const camera = new Camera(vec3.fromValues(40,40,40), vec3.fromValues(0, 0, 0));
+  const camera = new Camera(vec3.fromValues(60,50,100), vec3.fromValues(-80, -50, 0));
 
   const renderer = new OpenGLRenderer(canvas);
   renderer.setClearColor(0,0,0,1);

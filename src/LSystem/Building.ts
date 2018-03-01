@@ -170,20 +170,20 @@ class Building {
     let r2: vec3 = vec3.create();
 
     if(type == "base") {
-      r1 = vec3.fromValues(255,0,0);
-      r2 = vec3.fromValues(0,255,0);
+      r1 = vec3.fromValues(255, 0, 0);
+      r2 = vec3.fromValues(102, 255, 255);
     } else if(type == "walkway") {
-      r1 = vec3.fromValues(255,0,0);
-      r2 = vec3.fromValues(0,255,0);
+      r1 = vec3.fromValues(255, 255, 0);
+      r2 = vec3.fromValues(102, 0, 204);
     } else if(type == "rover") {
-      r1 = vec3.fromValues(255,0,0);
-      r2 = vec3.fromValues(0,255,0);
+      r1 = vec3.fromValues(255,255,255);
+      r2 = vec3.fromValues(0,0,0);
     } else {
-      r1 = vec3.fromValues(255,0,0);
+      r1 = vec3.fromValues(255,255,0);
       r2 = vec3.fromValues(0,255,0);
     }
 
-    let u = 1.0 - (1/globalR/5);
+    let u = 1.0 - (1/(globalR*10));
 
     let color: vec3 = vec3.create();
 
@@ -195,26 +195,29 @@ class Building {
 
     vec3.add(color, lhs, rhs);
 
-    vec3.scale(color, color, 1/255.0);
-
-
-    let localr1: vec3 = vec3.fromValues(255,255,255);
-    let localr2: vec3 = vec3.fromValues(0,0,0);
-
-    let localu = 1.0 - (r/100000);
-
-    let locallhs: vec3 = vec3.create();
-    vec3.scale(locallhs, localr1, 1-localu);
-
-    let localrhs: vec3 = vec3.create();
-    vec3.scale(localrhs, localr2, localu);
-
-    let localColor: vec3 = vec3.create();
-    vec3.add(localColor, locallhs, localrhs);
+    vec3.scale(color, color, 1.1/255.0);
 
     let finalColor: vec3 = vec3.create();
-    vec3.add(finalColor, localColor, color);
-    vec3.scale(finalColor, finalColor, 0.5);
+    vec3.copy(finalColor, color);
+
+
+    // let localr1: vec3 = vec3.fromValues(204, 51, 255);
+    // let localr2: vec3 = vec3.fromValues(0, 255, 255);
+
+    // let localu = 1.0 - (r/10);
+
+    // let locallhs: vec3 = vec3.create();
+    // vec3.scale(locallhs, localr1, 1-localu);
+
+    // let localrhs: vec3 = vec3.create();
+    // vec3.scale(localrhs, localr2, localu);
+
+    // let localColor: vec3 = vec3.create();
+    // vec3.add(localColor, locallhs, localrhs);
+
+    // let finalColor: vec3 = vec3.create();
+    // vec3.add(finalColor, localColor, color);
+    // vec3.scale(finalColor, finalColor, 0.5);
 
     let thisId: number;
 

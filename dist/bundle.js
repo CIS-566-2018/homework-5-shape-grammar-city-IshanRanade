@@ -3876,7 +3876,7 @@ function main() {
     loadScene();
     //let cameraPos: vec3 = vec3.fromValues(0, 25, -200);
     //vec3.rotateY(cameraPos, cameraPos, vec3.fromValues(0,0,0), 290 * Math.PI / 180.0);
-    const camera = new __WEBPACK_IMPORTED_MODULE_4__Camera__["a" /* default */](__WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(40, 40, 40), __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 0));
+    const camera = new __WEBPACK_IMPORTED_MODULE_4__Camera__["a" /* default */](__WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(60, 50, 100), __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(-80, -50, 0));
     const renderer = new __WEBPACK_IMPORTED_MODULE_3__rendering_gl_OpenGLRenderer__["a" /* default */](canvas);
     renderer.setClearColor(0, 0, 0, 1);
     gl.enable(gl.DEPTH_TEST);
@@ -15786,7 +15786,7 @@ class World {
     }
     generate() {
         // Add the ground plane
-        let groundColor = __WEBPACK_IMPORTED_MODULE_1_gl_matrix__["d" /* vec4 */].fromValues(232, 104, 97, 255);
+        let groundColor = __WEBPACK_IMPORTED_MODULE_1_gl_matrix__["d" /* vec4 */].fromValues(209, 80, 41, 255);
         __WEBPACK_IMPORTED_MODULE_1_gl_matrix__["d" /* vec4 */].scale(groundColor, groundColor, 1 / 255.0);
         this.geometry['ground'].add(__WEBPACK_IMPORTED_MODULE_1_gl_matrix__["d" /* vec4 */].fromValues(this.center[0], this.center[1] - 1.455, this.center[2], 1), __WEBPACK_IMPORTED_MODULE_1_gl_matrix__["d" /* vec4 */].fromValues(0, 0, 0, 1), __WEBPACK_IMPORTED_MODULE_1_gl_matrix__["d" /* vec4 */].fromValues(1000, 1000, 1000, 1), groundColor, __WEBPACK_IMPORTED_MODULE_1_gl_matrix__["d" /* vec4 */].fromValues(0, 0, 0, 0));
         let firstRadius = 10;
@@ -16139,7 +16139,7 @@ class Colony {
         let degrees = this.seed() * 360;
         __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["b" /* quat */].rotateY(colonyRotation, colonyRotation, degrees * Math.PI / 180);
         let domeScale = 3.3;
-        let craterColor = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["d" /* vec4 */].fromValues(232, 104, 97, 255);
+        let craterColor = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["d" /* vec4 */].fromValues(209, 80, 41, 255);
         __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["d" /* vec4 */].scale(craterColor, craterColor, 1 / 255.0);
         let domeColor = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["d" /* vec4 */].fromValues(125, 125, 125, 125);
         __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["d" /* vec4 */].scale(domeColor, domeColor, 1 / 255.0);
@@ -16188,8 +16188,8 @@ class Colony {
                     let translation = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].create();
                     __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].add(translation, curData.center, nextColonyPosition);
                     __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].scale(translation, translation, 0.5);
-                    let r1 = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 255, 0);
-                    let r2 = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 255);
+                    let r2 = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(255, 255, 255);
+                    let r1 = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 0);
                     let u = 1.0 - (1 / curData.radius);
                     let roadColor = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].create();
                     let lhs = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].create();
@@ -16385,40 +16385,42 @@ class Building {
         let r2 = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].create();
         if (type == "base") {
             r1 = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(255, 0, 0);
-            r2 = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 255, 0);
+            r2 = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(102, 255, 255);
         }
         else if (type == "walkway") {
-            r1 = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(255, 0, 0);
-            r2 = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 255, 0);
+            r1 = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(255, 255, 0);
+            r2 = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(102, 0, 204);
         }
         else if (type == "rover") {
-            r1 = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(255, 0, 0);
-            r2 = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 255, 0);
+            r1 = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(255, 255, 255);
+            r2 = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 0);
         }
         else {
-            r1 = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(255, 0, 0);
+            r1 = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(255, 255, 0);
             r2 = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 255, 0);
         }
-        let u = 1.0 - (1 / globalR / 5);
+        let u = 1.0 - (1 / (globalR * 10));
         let color = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].create();
         let lhs = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].create();
         __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].scale(lhs, r1, 1 - u);
         let rhs = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].create();
         __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].scale(rhs, r2, u);
         __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].add(color, lhs, rhs);
-        __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].scale(color, color, 1 / 255.0);
-        let localr1 = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(255, 255, 255);
-        let localr2 = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 0);
-        let localu = 1.0 - (r / 100000);
-        let locallhs = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].create();
-        __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].scale(locallhs, localr1, 1 - localu);
-        let localrhs = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].create();
-        __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].scale(localrhs, localr2, localu);
-        let localColor = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].create();
-        __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].add(localColor, locallhs, localrhs);
+        __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].scale(color, color, 1.1 / 255.0);
         let finalColor = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].create();
-        __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].add(finalColor, localColor, color);
-        __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].scale(finalColor, finalColor, 0.5);
+        __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].copy(finalColor, color);
+        // let localr1: vec3 = vec3.fromValues(204, 51, 255);
+        // let localr2: vec3 = vec3.fromValues(0, 255, 255);
+        // let localu = 1.0 - (r/10);
+        // let locallhs: vec3 = vec3.create();
+        // vec3.scale(locallhs, localr1, 1-localu);
+        // let localrhs: vec3 = vec3.create();
+        // vec3.scale(localrhs, localr2, localu);
+        // let localColor: vec3 = vec3.create();
+        // vec3.add(localColor, locallhs, localrhs);
+        // let finalColor: vec3 = vec3.create();
+        // vec3.add(finalColor, localColor, color);
+        // vec3.scale(finalColor, finalColor, 0.5);
         let thisId;
         if (type == "rover") {
             thisId = Building.id;
