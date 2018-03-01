@@ -25,7 +25,8 @@ window.onload = function() {
     'road': 'src/objs/road.obj',
     'platform': 'src/objs/platform.obj',
     'dome': 'src/objs/dome.obj',
-    'ground': 'src/objs/ground.obj'
+    'ground': 'src/objs/ground.obj',
+    'walkway': 'src/objs/walkway.obj'
   }, function(m: any) {
     meshes = m;
     main();
@@ -67,7 +68,7 @@ let tank: OBJGeometry;
 let door: OBJGeometry;
 
 let world: World;
-let types: string[] = ['tank', 'base', 'door', 'crater', 'road', 'platform', 'dome', 'ground'];
+let types: string[] = ['tank', 'base', 'door', 'crater', 'road', 'platform', 'dome', 'ground', 'walkway'];
 
 function loadScene() {
   world = new World(meshes, types, vec3.fromValues(0,0,0), vec3.fromValues(0,1,0), seedrandom(seed));

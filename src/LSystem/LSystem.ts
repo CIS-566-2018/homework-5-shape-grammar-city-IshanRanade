@@ -50,6 +50,18 @@ export class LSystem {
 
     return result;
   }
+
+  generateFromString(grammarString: string) {
+    let head: Node = new Node(grammarString[0]);
+
+    let temp: Node = head;
+    for(let i: number = 1; i < grammarString.length; ++i) {
+      temp.next = new Node(grammarString[i]);
+      temp = temp.next;
+    }
+
+    return head;
+  }
 };
 
 export default LSystem;
