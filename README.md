@@ -1,48 +1,63 @@
 
 # Project 5: Shape Grammar
 
-For this assignment you'll be building directly off of the L-system code you
-wrote last week.
+# Alien Mars Colony
 
-**Goal:** to model an urban environment using a shape grammar.
+![](shot-startview.png)
 
-**Note:** We’re well aware that a nice-looking procedural city is a lot of work for a single week. Focus on designing a nice building grammar. The city layout strategies outlined in class (the extended l-systems) are complex and not expected. We will be satisfied with something reasonably simple, just not a uniform grid!
+The city structure that I decided to model was an alien colony on Mars.  Each colony has a glass dome surrounding it.  Inside, the center has a platform with increasing smaller platforms connected outwards to the bounds of the crater the colony is house inside.
 
-## Symbol Node (5 points)
-Modify your symbol node class to include attributes necessary for rendering, such as
-- Associated geometry instance
-- Position
-- Scale
-- Anything else you may need
+## Demo Link
 
-## Grammar design (55 points)
-- Design at least five shape grammar rules for producing procedural buildings. Your buildings should vary in geometry and decorative features (beyond just differently-scaled cubes!). At least some of your rules should create child geometry that is in some way dependent on its parent’s state. (20 points)
-    - Eg. A building may be subdivided along the x, y, or z axis into two smaller buildings
-    - Some of your rules must be designed to use some property about its location. (10 points)
-    - Your grammar should have some element of variation so your buildings are non-deterministic.  Eg. your buildings sometimes subdivide along the x axis, and sometimes the y. (10 points)   
-- Write a renderer that will interpret the results of your shape grammar parser and adds the appropriate geometry to your scene for each symbol in your set. (10 points)
+https://ishanranade.github.io/homework-5-shape-grammar-city-IshanRanade/
 
-## Create a city (30 points)
-- Add a ground plane or some other base terrain to your scene (0 points, come on now)
-- Using any strategy you’d like, procedurally generate features that demarcate your city into different areas in an interesting and plausible way (Just a uniform grid is neither interesting nor plausible). (20 points)
-    - Suggestions: roads, rivers, lakes, parks, high-population density
-    - Note, these features don’t have to be directly visible, like high-population density, but they should somehow be visible in the appearance or arrangement of your buildings. Eg. High population density is more likely to generate taller buildings
-- Generate buildings throughout your city, using information about your city’s features. Color your buildings with a method that uses some aspect of its state. Eg. Color buildings by height, by population density, by number of rules used to generate it. (5 points)
-- Document your grammar rules and general approach in the readme. (5 points)
-- ???
-- Profit.
+## Shape Grammar
 
-## Make it interesting (10)
-Experiment! Make your city a work of art.
+![](shot-colony.png)
+![](shot-closeupunit.png)
 
-## Warnings:
-If you're not careful with how many draw calls you make in a single `tick()`,
-you can very easily blow up your CPU with this assignment. As with the L-system,
-try to group geometry into one VBO so the run-time of your program outside of
-the time spent generating the city is fast.
+There are a number of rules to the grammar that create the intricate internal structure:
 
-## Suggestions for the overachievers:
-Go for a very high level of decorative detail!
-Place buildings with a strategy such that buildings have doors and windows that are always accessible.
-Generate buildings with coherent interiors
-If dividing your city into lots, generate odd-shaped lots and create building meshes that match their shape .i.e. rather than working with cubes, extrude upwards from the building footprints you find to generate a starting mesh to subdivide rather than starting with platonic geometry.
+The first set of rules are to divide up the colony into Unit sections, within which the buildings will be placed:
+
+1) First place a single Unit node at the center of the colony.
+2) If you encounter a Unit node, send out an x amount of test vectors in random directions (based on a noise funcction), to test next location of colony.
+3) If the next location is valid, e.g. does not intersect another Unit, then place the Unit.
+4) Create a Road between these two Units.
+5) Recursively continue this iterations for a max iteration number of times, reducing the radius of each Unit for each recursive call.
+6) If you encounter a Road node, modify its color to represent its total walking distance from the center of the colony.
+
+The next set of rules are for the construction of the buildings within each Unit.  This works similar to an L-System by pushing new nodes into a queue, popping them off, checking their type, then following the appropriate rules based on this type:
+
+1) Place a Base node at the center of the unit.
+2) If we pull of a Base node, there are three options, either we create a second floor above this Base with a chance based on a noise function and the radius of the Unit, we can create a walkway that connect to another unit on the same floor level, or we do nothing.  If we do end up creating a new Base node, then we also modify its rotation.
+3) If we encounter a Walkway, then we have a chance of creating a Rover node.  These Rovers are like little alien spaceships.  The spaceship is placed in a location very high above this Walkway, to make them appear like they are flying in the sky area of the colony.
+4) If we encounter a Tank node, then we place the tank at the top of its parent Base Node.  This is supposed to make the appearance of alien skyscrapers.
+5) If we choose to create a higher level floor, we do so based on the coordinates of the parent node, and place a Base node with the appropate translation above.
+6) If we pull of a Base node, check its current level with respect to the parent node.  If the level is too high do not allow it to create another floor, to limit the size of buildings.
+
+Each Unit decreases in size as they are created recursively from the center Unit.  The sizes of the generated buildings also decrease as the Unit radius decreases.  This is meant to represent less populated areas, as well as possibly smaller alien species living in these sections of the Colony.
+
+## Colors
+
+The colors of each type of geometry linearly interpolate from one color to another within a colony based on its recursive distance from the center Unit node.  For example, a Base node will lerp from blue to red, and you will see that in the center section of the largest colony the bases are blue, and in the smaller units to the sides of the colony the bases are red.
+
+The color also change based on the size of Colony.  In the world, there are a number of colonies spread out with varying radiuses.  The noise functions that determine the color are dependent on the radius, so the colors assigned also change as the radius of the entire colony decreases.
+
+## Spaceships
+
+![](shot-rovers.png)
+
+There are also Spaceship nodes as described above that are generated as part of the shape grammar.  I chose to have these nodes be generated in the sky relative to their parent Walkway nodes to make it look like a busy city.  These spaceships move around in a circular pattern with an offset to the speed of their movement and the distance of their movement based on a noise function with their id as an input.  If you zoom out a bit and look at a Colony as a whole, you will see all the spaceships spinning and rotating around to give the appearance of a busy alien city.  The colors of the spaceships range between white and black as I felt these were the easiest colors to see with the background.
+
+## Landscape
+
+![](shot-landscape.png)
+
+The landscape was modeled to be a Mars looking landscape, some sort of alien planet.
+
+## Instancing
+
+I heavily utilized instancing to increase the performance of the application.  I found that with adding the same vertices of a mesh to a VBO for every instance of a geometry that I wanted with only modified affine attributes was a big performance waste.  It took a long time to calculate the transformation matrices and then apply them to every vertex, and all of this on the CPU side.  I found that instancing made this much faster as it only loads up the vertices of a mesh into a VBO once, and then sends a transformation matrix to the shaders for each instance of the geometry so the transformations can be applied on the GPU.  This gave me a huge performance boost, especially relative to the large number of geometries in my scene.
+
+On my Mac I am able to get it to run consistently around 30 FPS, and on computers with a better graphics card I would imagine it would be even higher.
