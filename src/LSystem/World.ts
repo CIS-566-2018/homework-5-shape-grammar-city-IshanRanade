@@ -28,7 +28,7 @@ class World {
     this.drawableGeometry = {};
     let trans: { [key:string]:mat4; } = {};
     trans['tank'] = mat4.create();
-    mat4.scale(trans['tank'], trans['tank'], vec3.fromValues(0.5, 1, 0.5));
+    mat4.scale(trans['tank'], trans['tank'], vec3.fromValues(0.6, 0.8, 0.6));
     trans['base'] = mat4.create();
     mat4.scale(trans['base'], trans['base'], vec3.fromValues(0.45,0.35,0.6));
     trans['door'] = mat4.create();

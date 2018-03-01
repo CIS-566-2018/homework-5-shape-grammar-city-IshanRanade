@@ -18,7 +18,7 @@ var OBJ = require('webgl-obj-loader');
 var meshes: any;
 window.onload = function() {
   OBJ.downloadMeshes({
-    'tank': 'src/objs/cylinder2.obj',
+    'tank': 'src/objs/tank.obj',
     'base': 'src/objs/base.obj',
     'door': 'src/objs/door.obj',
     'crater': 'src/objs/crater.obj',

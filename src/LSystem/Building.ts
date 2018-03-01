@@ -183,7 +183,7 @@ class Building {
       r2 = vec3.fromValues(0,255,0);
     }
 
-    let u = 1.0 - (1/globalR/10);
+    let u = 1.0 - (1/globalR/5);
 
     let color: vec3 = vec3.create();
 
